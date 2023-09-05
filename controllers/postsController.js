@@ -19,9 +19,9 @@ exports.index = asyncHandler(async (req, res, next) => {
 
 exports.posts_list = asyncHandler(async (req, res, next) => {
   const allPosts = await Post.find({})
-    .sort({ name: 1 })
+    .sort({ timestamp: 1 })
     .populate('user')
     .exec();
 
-  res.render('post_list', { title: 'Posts List', post_list: allPosts });
+  res.render('posts_list', { title: 'Posts List', post_list: allPosts });
 });

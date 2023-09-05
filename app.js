@@ -3,8 +3,14 @@ var express = require('express');
 var path = require('path');
 var logger = require('morgan');
 require('dotenv').config();
-const MongoDBKey = process.env.MONGODB_KEY;
 var routes = require('./routes/routes');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+var nconf = require('nconf');
+require('dotenv').config();
+const MongoDBKey = process.env.MONGODB_KEY;
 
 var app = express();
 
@@ -21,14 +27,12 @@ async function main() {
   await mongoose.connect(mongoDB);
 }
 
-// view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/public')));
-
 app.use('/', routes);
 
 // catch 404 and forward to error handler
