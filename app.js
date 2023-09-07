@@ -1,9 +1,8 @@
-var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var logger = require('morgan');
 require('dotenv').config();
-var routes = require('./routes/routes');
+var routes = require('./routes/index');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const mongoose = require('mongoose');
@@ -15,12 +14,22 @@ const MongoDBKey = process.env.MONGODB_KEY;
 var app = express();
 
 const dev_db_url = `mongodb+srv://admin:${MongoDBKey}@cluster0.lnrds0m.mongodb.net/inventory_application?retryWrites=true&w=majority`;
-
 const mongoDB = dev_db_url;
 
-const mongoose = require('mongoose');
-
 mongoose.set('strictQuery', false);
+
+passport.serializeUser(function (user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async function (id, done) {
+  try {
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (err) {
+    done(err);
+  }
+});
 
 main().catch((err) => debug(err));
 async function main() {
