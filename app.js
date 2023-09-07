@@ -1,5 +1,7 @@
 var express = require('express');
 var path = require('path');
+var createError = require('http-errors');
+
 var logger = require('morgan');
 require('dotenv').config();
 var routes = require('./routes/index');
@@ -37,10 +39,9 @@ async function main() {
 }
 
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/public')));
 app.use('/', routes);
 
@@ -59,8 +60,11 @@ app.use(function (err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
+
   res.status(err.status || 500);
+  console.log(err.status);
+  console.log(err.message);
   res.render('error');
 });
 
-module.exports = app;
+app.listen(3000, () => console.log('app listening on port 3000!'));

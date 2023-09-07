@@ -7,7 +7,7 @@ const { title } = require('process');
 exports.index = asyncHandler(async (req, res, next) => {
   const [numPosts, numCategories] = await Promise.all([
     Post.countDocuments({}).exec(),
-    Category.countDocuments({}).exec(),
+    User.countDocuments({}).exec(),
   ]);
 
   res.render('index', {

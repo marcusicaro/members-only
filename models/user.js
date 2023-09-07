@@ -11,4 +11,4 @@ UsersSchema.virtual('url').get(function () {
   return `/user/${this._id}`;
 });
 
-module.exports = mongoose.model('Category', UsersSchema);
+module.exports = mongoose.model('User', UsersSchema);
