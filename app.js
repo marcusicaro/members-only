@@ -12,6 +12,7 @@ const bcrypt = require('bcryptjs');
 var nconf = require('nconf');
 require('dotenv').config();
 const MongoDBKey = process.env.MONGODB_KEY;
+const User = require('./models/user');
 
 nconf.argv().env().file({ file: 'path/to/config.json' });
 
@@ -56,6 +57,7 @@ passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
       const user = await User.findOne({ username: username });
+      console.log(user);
       const match = await bcrypt.compare(password, user.password);
 
       if (!user) {
@@ -92,8 +94,6 @@ app.use(function (err, req, res, next) {
   // render the error page
 
   res.status(err.status || 500);
-  console.log(err.status);
-  console.log(err.message);
   res.render('error');
 });
 
