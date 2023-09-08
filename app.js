@@ -36,6 +36,28 @@ passport.deserializeUser(async function (id, done) {
   }
 });
 
+app.use(session({ secret: 'cats', resave: false, saveUninitialized: true }));
+passport.use(
+  new LocalStrategy(async (username, password, done) => {
+    try {
+      const user = await User.findOne({ username: username });
+      const match = await bcrypt.compare(password, user.password);
+
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username' });
+      }
+      if (!match) {
+        return done(null, false, { message: 'Incorrect password' });
+      }
+      return done(null, user);
+    } catch (err) {
+      return done(err);
+    }
+  })
+);
+
+app.use(passport.session());
+
 main().catch((err) => debug(err));
 async function main() {
   await mongoose.connect(mongoDB);
@@ -47,34 +69,12 @@ app.use(logger('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, '/public')));
 app.use('/', routes);
-app.use(session({ secret: 'cats', resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(function (req, res, next) {
   res.locals.currentUser = req.user;
   next();
 });
-passport.use(
-  new LocalStrategy(async (username, password, done) => {
-    try {
-      const user = await User.findOne({ username: username });
-      console.log(user);
-      const match = await bcrypt.compare(password, user.password);
 
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username' });
-      }
-      if (!match) {
-        // passwords do not match!
-        return done(null, false, { message: 'Incorrect password' });
-      }
-      return done(null, user);
-    } catch (err) {
-      return done(err);
-    }
-  })
-);
-
-app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
 // catch 404 and forward to error handler
@@ -92,6 +92,7 @@ app.use(function (err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
+  console.log(err);
 
   res.status(err.status || 500);
   res.render('error');
