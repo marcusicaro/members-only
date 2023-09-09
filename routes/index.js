@@ -7,8 +7,8 @@ const user_controller = require('../controllers/userController');
 require('dotenv').config();
 const passport = require('passport');
 router.get('/', user_controller.index);
-router.get('/posts', post_controller.posts_list);
-router.post('/posts', post_controller.post_create);
+router.get('/new-post', post_controller.new_post);
+router.post('/new-post', post_controller.post_create);
 router.get('/sign-up', user_controller.user_create_get);
 router.post('/sign-up', user_controller.user_create_post);
 

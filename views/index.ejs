@@ -24,5 +24,15 @@
       <button>Log In</button>
     </form>
     <%}%>
+    <div>
+      <% posts.forEach(function(item) { %>
+      <div>
+        <h2><%= item.title %></h2>
+        <p><%= item.text %></p>
+        <p><%= item.user %></p>
+        <p><%= item.timestamp %></p>
+      </div>
+      <% }); %>
+    </div>
   </body>
 </html>

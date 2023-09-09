@@ -11,11 +11,17 @@ exports.index = asyncHandler(async (req, res, next) => {
     User.countDocuments({}).exec(),
   ]);
 
+  const allPosts = await Post.find({})
+    .sort({ timestamp: 1 })
+    .populate('user')
+    .exec();
+
   res.render('index', {
     title: 'Local Library Home',
     post_count: numPosts,
     user_count: numCategories,
     user: req.user,
+    posts: allPosts,
   });
 });
 
