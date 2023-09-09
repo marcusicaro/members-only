@@ -21,6 +21,7 @@ router.get('/log-out', (req, res, next) => {
     res.redirect('/');
   });
 });
+router.get('/member', user_controller.member_page);
 router.post(
   '/log-in',
   passport.authenticate('local', {
@@ -28,5 +29,7 @@ router.post(
     failureRedirect: '/sign-up',
   })
 );
+
+router.post('/become-member', user_controller.user_change_membership_status);
 
 module.exports = router;

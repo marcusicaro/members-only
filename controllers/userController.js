@@ -47,3 +47,21 @@ exports.user_create_post = asyncHandler(async (req, res, next) => {
       }
     });
 });
+
+exports.user_change_membership_status = asyncHandler(async (req, res, next) => {
+  if (req.body.member_password === 'secret') {
+    try {
+      const userId = req.user._id;
+      const user = await User.findById(userId).exec();
+      user.member = !user.member;
+      const result = await user.save();
+    } catch (err) {
+      return next(err);
+    }
+  }
+  res.redirect('/member');
+});
+
+exports.member_page = asyncHandler(async (req, res, next) => {
+  res.render('member', { user: req.user });
+});
