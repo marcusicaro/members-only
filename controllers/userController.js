@@ -4,6 +4,7 @@ const { body, validationResult } = require('express-validator');
 const asyncHandler = require('express-async-handler');
 const { title } = require('process');
 const bcrypt = require('bcryptjs');
+const moment = require('moment');
 
 exports.index = asyncHandler(async (req, res, next) => {
   const [numPosts, numCategories] = await Promise.all([

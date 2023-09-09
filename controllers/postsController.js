@@ -19,10 +19,12 @@ exports.post_create = asyncHandler(async (req, res, next) => {
       .escape();
 
   const errors = validationResult(req);
+  const postUser = await User.findById(req.user._id).exec();
+
   const post = new Post({
     title: req.body.title,
     text: req.body.text,
-    user: req.user.username,
+    user: postUser,
     timestamp: Date.now(),
   });
   if (!errors.isEmpty()) {

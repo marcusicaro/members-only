@@ -29,8 +29,10 @@
       <div>
         <h2><%= item.title %></h2>
         <p><%= item.text %></p>
-        <p><%= item.user %></p>
-        <p><%= item.timestamp %></p>
+        <% if (user) {%> <% if (user.member === true) {%>
+        <p><%= item.user.username %></p>
+        <p><%= item.formattedDate %></p>
+        <%}%> <%}%>
       </div>
       <% }); %>
     </div>
