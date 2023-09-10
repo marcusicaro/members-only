@@ -1,4 +1,5 @@
 var express = require('express');
+const debug = require('debug')('app');
 var path = require('path');
 var createError = require('http-errors');
 const session = require('express-session');
