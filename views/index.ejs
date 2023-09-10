@@ -12,6 +12,13 @@
       <button>Become a member</button>
       <input type="password" name="member_password" />
     </form>
+    <%}%> <% if (user.admin != true) {%>
+    <form action="/become-admin" method="POST">
+      <button>Become an admin</button>
+      <input type="password" name="admin_password" />
+    </form>
+    <%}%> <% if(typeof(adminPasswordError) === 'string') {%>
+    <p>Admin password is incorrect</p>
     <%}%>
     <a href="/log-out">LOG OUT</a>
     <% } else { %>
@@ -41,5 +48,7 @@
       </div>
       <% }); %>
     </div>
+
+    <a href="/sign-up">Create Account</a>
   </body>
 </html>

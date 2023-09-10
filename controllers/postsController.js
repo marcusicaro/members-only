@@ -8,6 +8,15 @@ exports.new_post = asyncHandler(async (req, res, next) => {
   res.render('new_post', { title: 'Posts List' });
 });
 
+exports.post_delete = asyncHandler(async (req, res, next) => {
+  try {
+    await Post.findByIdAndRemove(req.body.id);
+    res.redirect('/');
+  } catch (err) {
+    return next(err);
+  }
+});
+
 exports.post_create = asyncHandler(async (req, res, next) => {
   body('title', 'Title must not be empty.')
     .trim()

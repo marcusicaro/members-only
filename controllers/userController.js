@@ -7,11 +7,6 @@ const bcrypt = require('bcryptjs');
 const moment = require('moment');
 
 exports.index = asyncHandler(async (req, res, next) => {
-  const [numPosts, numCategories] = await Promise.all([
-    Post.countDocuments({}).exec(),
-    User.countDocuments({}).exec(),
-  ]);
-
   const allPosts = await Post.find({})
     .sort({ timestamp: 1 })
     .populate('user')
@@ -19,8 +14,6 @@ exports.index = asyncHandler(async (req, res, next) => {
 
   res.render('index', {
     title: 'Local Library Home',
-    post_count: numPosts,
-    user_count: numCategories,
     user: req.user,
     posts: allPosts,
   });
@@ -67,6 +60,32 @@ exports.user_change_membership_status = asyncHandler(async (req, res, next) => {
     }
   }
   res.redirect('/member');
+});
+
+exports.user_change_admin_status = asyncHandler(async (req, res, next) => {
+  const allPosts = await Post.find({})
+    .sort({ timestamp: 1 })
+    .populate('user')
+    .exec();
+
+  if (req.body.admin_password === 'admin') {
+    try {
+      const userId = req.user._id;
+      const user = await User.findById(userId).exec();
+      user.admin = !user.admin;
+      const result = await user.save();
+    } catch (err) {
+      return next(err);
+    }
+    res.redirect('/');
+  } else {
+    res.render('index', {
+      title: 'Local Library Home',
+      user: req.user,
+      posts: allPosts,
+      adminPasswordError: 'incorrect admin password',
+    });
+  }
 });
 
 exports.member_page = asyncHandler(async (req, res, next) => {

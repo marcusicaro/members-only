@@ -30,6 +30,8 @@ router.post(
   })
 );
 
+router.post('/delete-post', post_controller.post_delete);
 router.post('/become-member', user_controller.user_change_membership_status);
+router.post('/become-admin', user_controller.user_change_admin_status);
 
 module.exports = router;
