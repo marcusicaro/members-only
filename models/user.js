@@ -6,6 +6,7 @@ const UsersSchema = new Schema({
   username: { type: String, required: true },
   password: { type: String, required: true },
   member: { type: Boolean, default: false },
+  admin: { type: Boolean, default: false },
 });
 
 UsersSchema.virtual('url').get(function () {

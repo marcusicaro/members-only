@@ -32,7 +32,11 @@
         <% if (user) {%> <% if (user.member === true) {%>
         <p><%= item.user.username %></p>
         <p><%= item.formattedDate %></p>
-        <%}%> <%}%>
+        <%}%> <%}%> <% if (user) {%> <% if (user.admin === true) {%>
+        <form action="/delete-post" method="POST">
+          <input type="hidden" name="id" value="<%= item.id %>" />
+          <button>Delete</button>
+        </form>
       </div>
       <% }); %>
     </div>
